@@ -19,11 +19,11 @@ const pgClient = new Pool ({
     password: keys.pgPassword,
     post: pgPort
 });
-pgClient.on('error', () => console.log('Lost PG Connections'));
-
-pgClient
-    .query('CREATE TABLE IF NOT EXISTS values (number INT) ')
-    .catch(err => console.log(err));
+pgClient.on('connect', () => {
+    pgClient
+      .query('CREATE TABLE IF NOT EXISTS values (number INT)')
+      .catch((err) => console.log(err));
+  });
 
 // Redis Client Setup
 const redis = require('redis');
@@ -62,13 +62,11 @@ app.post('/values', async (req, res) => {
 
     redisClient.hset('values', index, 'Nothing yet!');
     redisPublisher.publish('insert', index);
-    pgClient.query('INSERT INTO values(number) VALUES$1', [index]);
+    pgClient.query('INSERT INTO values(number) VALUES($1)', [index]);
 
     res.send({working: true});
 });
 
 app.listen(5000, err => {
-    console.log('Lisetning');
+    console.log('Listening');
 });
-
-nodule.exports = express();
