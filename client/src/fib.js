@@ -54,6 +54,7 @@ class Fib extends Component {
 
     // Note text of event handler for input field, especially the this.setState for the value
     render() {
+        return (
         <div>
             <form onSubmit={this.handleSubmit}>
                 <label>Enter your index:</label>
@@ -69,6 +70,7 @@ class Fib extends Component {
             <h3>Calculated Values:</h3>
             {this.renderValues()}
         </div>
+        );
     }
 }
 
