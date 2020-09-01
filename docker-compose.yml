@@ -3,7 +3,11 @@ services:
     postgres:
         image: 'postgres:latest'
         environment:
+            - PGUSER=postgres
+            - PGHOST=postgres
+            - PGDATABASE=postgres
             - POSTGRES_PASSWORD=postgres_password
+            - PGPORT=5432
     redis:
         image: 'redis:latest'
     server:
@@ -13,4 +17,8 @@ services:
         volumes:
             - /app/node_modules
             - ./server:/app
-             
+        environment:
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+
+            
