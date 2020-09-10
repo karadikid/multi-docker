@@ -42,7 +42,6 @@ app.get('/', (req, res) => {
 
 app.get('/values/all', async (req, res) => {
   // await syntax due to built-in promise support in Postgres library
-
   const values = await pgClient.query('SELECT * from values');
 
   res.send(values.rows);
