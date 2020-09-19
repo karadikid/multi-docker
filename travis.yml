@@ -1,0 +1,17 @@
+sudo: required
+services:
+  - docker
+before_install:
+  - docker build -t karadikid/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run karadikid/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t karadikid/multi-client ./client
+  - docker build -t karadikid/multi-nginx  ./nginx
+  - docker build -t karadikid/multi-server ./server
+  - docker build -t karadikid/multi-worker ./worker
+
+  
+
