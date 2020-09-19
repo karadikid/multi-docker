@@ -1,0 +1,24 @@
+sudo: required
+services:
+  - docker
+before_install:
+  - docker build -t gouthum/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true gouthum/react-test npm test
+
+after_success:
+  - docker build -t gouthum/multi-client ./client
+  - docker build -t gouthum/multi-nginx  ./nginx
+  - docker build -t gouthum/multi-server ./server
+  - docker build -t gouthum/multi-worker ./worker
+
+# Login to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+# Push images to docker-hub
+  - docker push gouthum/multi-client
+  - docker push gouthum/multi-nginx
+  - docker push gouthum/multi-server
+  - docker push gouthum/multi-worker
+
+
