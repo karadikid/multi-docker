@@ -1,31 +1,38 @@
 {
     "AWSEBDockerrunVersion": 2,
-    "containerDefinitions":
-    [
+    "containerDefinitions": [
         {
-            "name":"client",
+            "name": "client",
             "image": "gouthum/multi-client",
             "hostname": "client",
             "essential": false
         },
         {
-            "name":"server",
+            "name": "server",
             "image": "gouthum/multi-server",
             "hostname": "api",
             "essential": false
         },
         {
-            "name":"worker",
+            "name": "worker",
             "image": "gouthum/multi-worker",
             "hostname": "worker",
             "essential": false
         },
         {
-            "name":"nginx",
+            "name": "nginx",
             "image": "gouthum/multi-nginx",
             "essential": true,
-
-        },
-        
+            "portMappings": [
+                {
+                    "hostPort": 80,
+                    "containerPort": 80
+                }
+            ],
+            "links": [
+                "client",
+                "server"
+            ]
+        }
     ]
 }
